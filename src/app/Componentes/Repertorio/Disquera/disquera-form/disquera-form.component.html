@@ -1,0 +1,139 @@
+<div class="scroll-form row">
+    <div class="col-md-6 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+
+                    <!-- Nombre -->
+                    <div class="card-body">
+                        <input type="text" formControlName="Nombre" [(ngModel)]="disquera.nombre"
+                            placeholder="Nombre de la disquera:" class="form-control" autofocus
+                            [class.is-invalid]="form.get('Nombre')?.invalid && form.get('Nombre')?.touched"
+                            [class.is-valid]="form.get('Nombre')?.valid">
+
+                        <span *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+                            El campo <span class="alerta">nombre</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Fundacion -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label for="input-Disquera" class="input-group-text">Fecha de Fundacion</label>
+                            <input id="input-Disquera" type="date" [(ngModel)]="disquera.fundacion"
+                                formControlName="Fundacion" class="form-control"
+                                [class.is-invalid]="form.get('Fundacion')?.invalid && form.get('Fundacion')?.touched"
+                                [class.is-valid]="form.get('Fundacion')?.valid" max="9999-12-31" />
+                        </div>
+
+                        <span *ngIf="form.get('Fundacion')?.hasError('required') && form.get('Fundacion')?.touched">
+                            El campo <span class="alerta">Fundacion</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Fundador -->
+                    <div class="card-body">
+                        <input type="text" formControlName="Fundador" [(ngModel)]="disquera.fundador"
+                            placeholder="Fundadores:" class="form-control"
+                            [class.is-invalid]="form.get('Fundador')?.invalid && form.get('Fundador')?.touched"
+                            [class.is-valid]="form.get('Fundador')?.valid">
+
+                        <span *ngIf="form.get('Fundador')?.hasError('required') && form.get('Fundador')?.touched">
+                            El campo <span class="alerta">Fundador</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Generos -->
+                    <div class="card-body">
+                        <textarea formControlName="Generos" [(ngModel)]="disquera.generos" placeholder="Generos:"
+                            rows="2" class="form-control"
+                            [class.is-invalid]="form.get('Generos')?.invalid && form.get('Generos')?.touched"
+                            [class.is-valid]="form.get('Generos')?.valid"></textarea>
+
+                        <span *ngIf="form.get('Generos')?.hasError('required') && form.get('Generos')?.touched">
+                            El campo <span class="alerta">Generos</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Pais -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <!-- <label class="input-group-text" for="inputGroupSelect02">País</label> -->
+                             <input type="text" formControlName="Pais" [(ngModel)]="search" placeholder="País:"
+                                class="form-control"
+                                [class.is-invalid]="form.get('PaisId')?.invalid && form.get('PaisId')?.touched"
+                                [class.is-valid]="form.get('PaisId')?.valid">
+
+                            <select *ngIf="search != null || edit" formControlName="PaisId" [(ngModel)]="disquera.paisId" class="form-control"
+                                id="inputGroupSelect02"
+                                [class.is-invalid]="form.get('PaisId')?.invalid && form.get('PaisId')?.touched"
+                                [class.is-valid]="form.get('PaisId')?.valid">
+                                <option selected disabled value="0">Selecciona una Nacionalidad</option>
+                                <option *ngFor="let pais of Paises | customGlobalFilter:search" value="{{pais.paisId}}">{{pais.nombre}}</option>
+                            </select>
+
+                            <button type="button" class="btn btn-primary" (click)="refrescarPaises()"
+                                title="Refrescar paises">
+                                ↻
+                            </button>
+                        </div>
+
+                        <span *ngIf="form.get('PaisId')?.hasError('noCero') && form.get('PaisId')?.touched">
+                            El campo <span class="alerta">País</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Estatus -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label class="input-group-text" for="actividad">Estatus</label>
+                            <select formControlName="EstatusId" [(ngModel)]="disquera.estatusId" class="form-control"
+                                id="actividad"
+                                [class.is-invalid]="form.get('EstatusId')?.invalid && form.get('EstatusId')?.touched"
+                                [class.is-valid]="form.get('EstatusId')?.valid">
+                                <option selected disabled value="0">Selecciona un Estatus</option>
+                                <option *ngFor="let e of Estatus" [value]="e.EstatusId">{{e.Estatus}}</option>
+                            </select>
+                        </div>
+
+                        <span *ngIf="form.get('EstatusId')?.hasError('noCero') && form.get('EstatusId')?.touched">
+                            El campo <span class="alerta">Estatus</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Foto -->
+                    <div class="card-body">
+                        <input type="url" formControlName="Logo" [(ngModel)]="disquera.logo" placeholder="Foto:"
+                            class="form-control"
+                            [class.is-invalid]="form.get('Logo')?.invalid && form.get('Logo')?.touched"
+                            [class.is-valid]="form.get('Logo')?.valid">
+
+                        <span *ngIf="form.get('Logo')?.hasError('required') && form.get('Logo')?.touched">
+                            El campo <span class="alerta">Logo</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+                        <button class="btn btn-primary" (click)="regresar()">Regresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 inicio-card">
+        <div class="card card-body text-center">
+            <img [src]="disquera.logo == '' ? '/assets/noImagen.png' : disquera.logo " class="card-img-top"
+                (error)="funciones.imagenNoValida($event)">
+            <h3 style="text-transform: uppercase;">
+                {{disquera.disqueraId}} - {{disquera.nombre == '' ? 'Nombre de la Disquera' : disquera.nombre}}
+            </h3>
+            <p>{{disquera.fundacion == ''? 'Fundación' : (disquera.fundacion | date: 'dd / MMMM / yyyy')}}</p>
+            <p>{{disquera.fundador == '' ? 'Fundadores' : disquera.fundador}}</p>
+            <p>{{disquera.generos == '' ? 'Géneros' : disquera.generos}}</p>
+            <p>{{disquera.paisId ? getNombrePais(disquera.paisId) : 'País de la Disquera'}}</p>
+            <p>{{disquera.estatusId ? getNombreEstatus(disquera.estatusId) : 'Estado de la Disquera'}}</p>
+        </div>
+    </div>
+</div>

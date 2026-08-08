@@ -1,0 +1,128 @@
+<nav class="navbar navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" [routerLink]="['..']">
+      <img src="favicon.ico" alt="Logo" height="22" class="d-inline-block align-text-top">
+      Repertorio Música
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
+      aria-controls="offcanvasDarkNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
+      aria-labelledby="offcanvasDarkNavbarLabel">
+      <div class="offcanvas-header custom-offcanvas-header">
+        <img src="favicon.ico" alt="Logo" width="20" height="20" class="d-inline-block align-text-top">
+        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Repertorio Música</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+
+      <div class="offcanvas-body d-flex flex-column">
+        <ul class="navbar-nav flex-grow-1">
+
+          <!-- Sección principal: Artistas, Grupos, Canciones -->
+          <ng-container *ngFor="let item of navItemsPrincipal">
+            <ng-container *ngIf="puedeVerSeccion(item.seccion)">
+
+              <!-- Link simple -->
+              <li class="nav-item" *ngIf="esLink(item)">
+                <a class="nav-link" routerLinkActive="active" [routerLink]="item.routerLink" [routerLinkActiveOptions]="{ exact: true }">{{ item.nombre }}</a>
+              </li>
+
+              <!-- Dropdown con sub-items -->
+              <li class="nav-item dropdown" *ngIf="esDropdown(item)">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  {{ item.nombre }}
+                </a>
+                <ul class="dropdown-menu">
+                  <ng-container *ngFor="let sub of item.items">
+                    <li *ngIf="puedeVerSeccion(sub.seccion)">
+                      <hr class="dropdown-divider" *ngIf="sub.divisorAntes">
+                      <a class="dropdown-item" routerLinkActive="active" [routerLink]="sub.routerLink" [routerLinkActiveOptions]="{ exact: true }">
+                        {{ sub.nombre }}
+                      </a>
+                    </li>
+                  </ng-container>
+                </ul>
+              </li>
+
+            </ng-container>
+          </ng-container>
+
+          <!-- Separador antes de Auditoria / Usuarios / Otros Proyectos -->
+          <hr class="hr hr-blurry" *ngIf="permiso.puedeVer(Seccion.Bitacora) || permiso.puedeVer(Seccion.Usuarios)" />
+
+          <!-- Sección de auditoria: Bitácora, Usuarios -->
+          <ng-container *ngFor="let item of navItemsAuditoria">
+            <ng-container *ngIf="puedeVerSeccion(item.seccion)">
+
+              <!-- Link simple -->
+              <li class="nav-item" *ngIf="esLink(item)">
+                <a class="nav-link" routerLinkActive="active" [routerLink]="item.routerLink" [routerLinkActiveOptions]="{ exact: true }">{{ item.nombre }}</a>
+              </li>
+
+              <!-- Dropdown con sub-items -->
+              <li class="nav-item dropdown" *ngIf="esDropdown(item)">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  {{ item.nombre }}
+                </a>
+                <ul class="dropdown-menu">
+                  <ng-container *ngFor="let sub of item.items">
+                    <li *ngIf="puedeVerSeccion(sub.seccion)">
+                      <hr class="dropdown-divider" *ngIf="sub.divisorAntes">
+                      <a class="dropdown-item" routerLinkActive="active" [routerLink]="sub.routerLink" [routerLinkActiveOptions]="{ exact: true }">
+                        {{ sub.nombre }}
+                      </a>
+                    </li>
+                  </ng-container>
+                </ul>
+              </li>
+
+            </ng-container>
+          </ng-container>
+
+          <!-- Otros Proyectos -->
+          <li class="nav-item dropdown" *ngIf="permiso.puedeVer(Seccion.OtrosProyectos)">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Otros Proyectos
+            </a>
+
+            <ul class="dropdown-menu">
+              <li *ngFor="let item of otrosProyectosFiltrados">
+                <a class="dropdown-item" [href]="item.url" target="_blank">
+                  {{ item.nombre }}
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Cerrar Sesion -->
+          <hr class="hr hr-blurry" />
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-user-circle me-2"></i> <!-- icono usuario -->
+              {{user}}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow">
+              <li>
+                <a class="dropdown-item d-flex align-items-center" [routerLink]="['profile']">
+                  <i class="fa-solid fa-id-card me-2"></i> Perfil
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center logout-item" (click)="Salir()">
+                  <i class="fa-solid fa-right-from-bracket me-2"></i> Cerrar Sesión
+                </a>
+              </li>
+            </ul>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,67 @@
+<div class="scroll-form row">
+    <div class="col-md-6 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+
+                    <!-- Nombre -->
+                    <div class="card-body">
+                        <input type="text" formControlName="Nombre" [(ngModel)]="instrumento.nombre"
+                            placeholder="Nombre del Instrumento:" class="form-control" autofocus
+                            [class.is-invalid]="form.get('Nombre')?.invalid && form.get('Nombre')?.touched"
+                            [class.is-valid]="form.get('Nombre')?.valid">
+
+                        <span *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+                            El campo <span class="alerta">nombre</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Descripcion -->
+                    <div class="card-body">
+                        <!-- <input type="text" formControlName="Descripcion" [(ngModel)]="instrumento.descripcion"
+                            placeholder="Descripción del Instrumento:" class="form-control" autofocus
+                            [class.is-invalid]="form.get('Descripcion')?.invalid && form.get('Descripcion')?.touched"
+                            [class.is-valid]="form.get('Descripcion')?.valid"> -->
+
+                        <textarea type="text" formControlName="Descripcion" [(ngModel)]="instrumento.descripcion"
+                            placeholder="Descripción del Instrumento:" class="form-control"
+                            [class.is-invalid]="form.get('Descripcion')?.invalid && form.get('Descripcion')?.touched"
+                            [class.is-valid]="form.get('Descripcion')?.valid" rows="3"></textarea>
+
+                        <span *ngIf="form.get('Descripcion')?.hasError('required') && form.get('Descripcion')?.touched">
+                            El campo <span class="alerta">Descripcion</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Foto -->
+                    <div class="card-body">
+                        <input type="url" formControlName="Foto" [(ngModel)]="instrumento.foto"
+                            placeholder="URL de la foto:" class="form-control" autofocus
+                            [class.is-invalid]="form.get('Foto')?.invalid && form.get('Foto')?.touched"
+                            [class.is-valid]="form.get('Foto')?.valid">
+
+                        <span *ngIf="form.get('Foto')?.hasError('required') && form.get('Foto')?.touched">
+                            El campo <span class="alerta">Foto</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+                        <button *ngIf="!edit" class="btn btn-primary" [routerLink]="['..']">Regresar</button>
+                        <button *ngIf="edit" class="btn btn-primary" [routerLink]="['../../']">Regresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 inicio-card">
+        <div class="card card-body text-center">
+            <img [src]="instrumento.foto == '' ? '/assets/noImagen.png' : instrumento.foto " class="card-img-top"
+                (error)="funciones.imagenNoValida($event)">
+            <h3 style="text-transform: uppercase;">{{instrumento.instrumentoId}} - {{instrumento.nombre == '' ? 'Nombre
+                del Instrumento' : instrumento.nombre}}</h3>
+            <p>{{instrumento.descripcion == '' ? 'Descripción' : instrumento.descripcion}}</p>
+        </div>
+    </div>
+</div>

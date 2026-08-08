@@ -1,0 +1,201 @@
+<div class="inicio-card input-group flex-nowrap">
+    <div class="btn-group dropend" role="group"
+        *ngIf="permiso.puedeCrear(Seccion.Grupo) || permiso.puedeCrear(Seccion.ArtistaGrupo)">
+        <button type="button" class="btn btn-primary dropdown-toggle no-radius" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Agregar
+        </button>
+        <ul class="dropdown-menu">
+            <li *ngIf="permiso.puedeCrear(Seccion.Grupo)">
+                <a class="dropdown-item" [routerLink]="['agregar']">Grupo</a>
+            </li>
+            <li *ngIf="permiso.puedeCrear(Seccion.ArtistaGrupo)">
+                <a class="dropdown-item" [routerLink]="['../artistaGrupo','agregar']">Integrante</a>
+            </li>
+        </ul>
+    </div>
+
+    <span class="input-group-text" id="addon-wrapping"><i class="fa-solid fa-magnifying-glass"></i></span>
+    <input *ngIf="!tabla" #inputMaterial matInput placeholder="Buscar" class="form-control bg-dark text-white mb-2"
+        (keyup)="applyFilter($event)" autofocus>
+
+    <input *ngIf="tabla" type="text" class="form-control bg-dark text-white mb-2" placeholder="Buscar"
+        [(ngModel)]="search" autofocus>
+
+    <a *ngIf="tabla" type="button" class="btn btn-outline-light" (click)="cambiarVista()">
+        <i class="fa-solid fa-list"></i>
+    </a>
+    <a *ngIf="!tabla" type="button" class="btn btn-outline-light" (click)="cambiarVista()">
+        <i class="fa-solid fa-table"></i>
+    </a>
+
+    <!-- Exportar -->
+    <app-export-button [action]="export.bind(this)" color="success" [outline]="true"
+        extraClass="me-2"></app-export-button>
+</div>
+
+<label *ngIf="tabla">Total: {{ (Grupos | customGlobalFilter:search).length }} registros</label>
+
+<div class="container-scroll row" [hidden]="!tabla">
+    <div class="col-md-4" *ngFor="let grupos of Grupos| customGlobalFilter:search" style="margin-bottom: 1.5rem;">
+        <div class="card text-center">
+            <div class="card-header text-white d-flex justify-content-between align-items-center">
+                {{grupos.nombre}}
+
+                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                    <button *ngIf="permiso.puedeEliminar(Seccion.Grupo)" class="btn btn-danger"
+                        (click)="borrar(grupos.grupoId)">
+                        <i class="far fa-trash-alt"></i>
+                    </button>
+
+                    <button *ngIf="!show" class="btn btn-primary" (click)="show = !show">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </button>
+                    <button *ngIf="show" class="btn btn-primary" (click)="show = !show">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box">
+                <img [src]="grupos.logo == '' ? '/assets/noImagen.png' : grupos.logo " alt="Imagen del Grupo"
+                    (error)="funciones.imagenNoValida($event)" loading="lazy">
+            </div>
+            <div class="card-body" *ngIf="show">
+                <p style="font-weight: bold;">Albumes</p>
+                <p>{{grupos.albumes}}</p>
+                <p style="font-weight: bold;">Canciones</p>
+                <p>{{grupos.canciones}}</p>
+                <p style="font-weight: bold;">Origen</p>
+                <p>{{grupos.origen}}</p>
+                <p style="font-weight: bold;">Genero</p>
+                <p>{{grupos.genero}}</p>
+                <p style="font-weight: bold;">Periodo</p>
+                <p>{{grupos.periodo}}</p>
+                <p style="font-weight: bold;">Estado</p>
+                <p>{{grupos.estatus}}</p>
+                <p style="font-weight: bold;">Sitio Web</p>
+                <p><a href="{{grupos.sitioWeb}}" target="_blank">{{grupos.sitioWeb}}</a></p>
+
+                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                    <a *ngIf="permiso.puedeEditar(Seccion.Grupo)" [routerLink]="['actualizar', grupos.grupoId]"
+                        class="btn btn-info btn-block"><i class="fa-solid fa-pen-to-square"></i>
+                    </a>
+
+                    <a *ngIf="permiso.puedeVer(Seccion.Cancion)" [routerLink]="['../buscar/cancion', grupos.grupoId]"
+                        class="btn btn-success btn-block">
+                        <i class="fa-solid fa-music"></i>
+                    </a>
+
+                    <a *ngIf="permiso.puedeVer(Seccion.Album)" [routerLink]="['../buscar/album', grupos.grupoId]"
+                        class="btn btn-warning btn-block">
+                        <i class="fa-sharp fa-solid fa-compact-disc"></i>
+                    </a>
+
+                    <a *ngIf="permiso.puedeVer(Seccion.Artista)" [routerLink]="['../buscar/integrante', grupos.grupoId]"
+                        class="btn btn-danger btn-block">
+                        <i class="fa-solid fa-user"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Tabla -->
+<div [hidden]="tabla">
+    <div class="container-scroll">
+        <div class="table-wrapper">
+            <table mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="grupoId">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                    <td mat-cell *matCellDef="let grupo">{{ grupo.grupoId }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+                    <td mat-cell *matCellDef="let grupo">{{ grupo.nombre }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="albumes">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Álbumes</th>
+                    <td mat-cell *matCellDef="let grupo">{{ grupo.albumes }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="canciones">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Canciones</th>
+                    <td mat-cell *matCellDef="let grupo">{{ grupo.canciones }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="origen">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Origen</th>
+                    <td mat-cell *matCellDef="let grupo">{{ grupo.origen }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="genero">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Géneros</th>
+                    <td mat-cell *matCellDef="let grupo">{{ grupo.genero }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="periodo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Periodo</th>
+                    <td mat-cell *matCellDef="let grupo">{{ grupo.periodo }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="sellos">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Sellos</th>
+                    <td mat-cell *matCellDef="let grupo">{{ grupo.sellos }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="estatus">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Estatus</th>
+                    <td mat-cell *matCellDef="let grupo">{{ grupo.estatus }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="idioma">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Idioma</th>
+                    <td mat-cell *matCellDef="let grupo">{{ grupo.idioma }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                    <td mat-cell *matCellDef="let grupo">
+                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <a *ngIf="permiso.puedeEditar(Seccion.Grupo)" [routerLink]="['actualizar', grupo.grupoId]"
+                                class="btn btn-info btn-block"><i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+
+                            <button *ngIf="permiso.puedeEliminar(Seccion.Grupo)" class="btn btn-danger"
+                                (click)="borrar(grupo.grupoId)">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+
+                            <a *ngIf="permiso.puedeVer(Seccion.Cancion)"
+                                [routerLink]="['../buscar/cancion', grupo.grupoId]" class="btn btn-success btn-block">
+                                <i class="fa-solid fa-music"></i>
+                            </a>
+
+                            <a *ngIf="permiso.puedeVer(Seccion.Album)" [routerLink]="['../buscar/album', grupo.grupoId]"
+                                class="btn btn-warning btn-block">
+                                <i class="fa-sharp fa-solid fa-compact-disc"></i>
+                            </a>
+
+                            <a *ngIf="permiso.puedeVer(Seccion.Artista)"
+                                [routerLink]="['../buscar/integrante', grupo.grupoId]" class="btn btn-danger btn-block">
+                                <i class="fa-solid fa-user"></i>
+                            </a>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <p *ngIf="dataSource.data.length === 0" class="text-center">No hay grupos registrados.</p>
+        </div>
+    </div>
+    <div class="paginator-container">
+        <mat-paginator [pageSize]="pageSize"></mat-paginator>
+    </div>
+</div>

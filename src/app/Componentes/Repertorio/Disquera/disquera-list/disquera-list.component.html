@@ -1,0 +1,133 @@
+<div class="inicio-card input-group flex-nowrap">
+    <a *ngIf="permiso.puedeCrear(Seccion.Disquera)" type="button" class="btn btn-primary"
+        [routerLink]="['agregar']">Agregar</a>
+
+    <span class="input-group-text" id="addon-wrapping"><i class="fa-solid fa-magnifying-glass"></i></span>
+    <input *ngIf="!tabla" #inputMaterial matInput placeholder="Buscar" class="form-control bg-dark text-white mb-2"
+        (keyup)="applyFilter($event)" autofocus>
+
+    <input *ngIf="tabla" type="text" class="form-control bg-dark text-white mb-2" placeholder="Buscar"
+        [(ngModel)]="search" autofocus>
+
+    <a *ngIf="tabla" type="button" class="btn btn-outline-light" (click)="cambiarVista()">
+        <i class="fa-solid fa-list"></i>
+    </a>
+    <a *ngIf="!tabla" type="button" class="btn btn-outline-light" (click)="cambiarVista()">
+        <i class="fa-solid fa-table"></i>
+    </a>
+
+    <!-- Exportar -->
+    <app-export-button [action]="export.bind(this)" color="success" [outline]="true"
+        extraClass="me-2"></app-export-button>
+</div>
+
+<label *ngIf="tabla">Total: {{ (Disqueras | customGlobalFilter:search).length }} registros</label>
+
+<div class="container-scroll row" [hidden]="!tabla">
+    <div class="col-md-4" *ngFor="let disquera of Disqueras | customGlobalFilter:search" style="margin-bottom: 1.5rem;">
+        <div class="card text-center">
+            <div class="card-header text-white d-flex justify-content-between align-items-center">
+                {{disquera.nombre}}
+
+                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                    <button *ngIf="permiso.puedeEliminar(Seccion.Disquera)" class="btn btn-danger"
+                        (click)="borrar(disquera.disqueraId)">
+                        <i class="far fa-trash-alt"></i>
+                    </button>
+
+                    <button *ngIf="!show" class="btn btn-primary" (click)="show = !show">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </button>
+                    <button *ngIf="show" class="btn btn-primary" (click)="show = !show">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                </div>
+
+            </div>
+            <div class="box">
+                <img [src]="disquera.logo == '' ? '/assets/noImagen.png' : disquera.logo " alt="Imagen de la Disquera"
+                    (error)="funciones.imagenNoValida($event)" loading="lazy">
+            </div>
+            <div class="card-body" *ngIf="show">
+                <p style="font-weight: bold;">Fundacion</p>
+                <p>{{disquera.fundacion | date: 'MMMM / yyyy'}}</p>
+                <p style="font-weight: bold;">Fundadores</p>
+                <p>{{disquera.fundador}}</p>
+                <p style="font-weight: bold;">Generos</p>
+                <p>{{disquera.generos}}</p>
+                <p style="font-weight: bold;">Pais</p>
+                <p>{{disquera.pais}}</p>
+                <a *ngIf="permiso.puedeEditar(Seccion.Disquera)" [routerLink]="['actualizar', disquera.disqueraId]"
+                    class="btn btn-info btn-block">Editar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div [hidden]="tabla">
+    <div class="container-scroll">
+        <div class="table-wrapper">
+            <table mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="disqueraId">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                    <td mat-cell *matCellDef="let disquera">{{ disquera.disqueraId }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+                    <td mat-cell *matCellDef="let disquera">{{ disquera.nombre }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="fundacion">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fundación</th>
+                    <td mat-cell *matCellDef="let disquera">{{ disquera.fundacion | date: 'MMMM / yyyy' }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="fundador">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fundador</th>
+                    <td mat-cell *matCellDef="let disquera">{{ disquera.fundador }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="generos">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Géneros</th>
+                    <td mat-cell *matCellDef="let disquera">{{ disquera.generos }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="pais">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>País</th>
+                    <td mat-cell *matCellDef="let disquera">{{ disquera.pais }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="estatus">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Estatus</th>
+                    <td mat-cell *matCellDef="let disquera">{{ disquera.estatus }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                    <td mat-cell *matCellDef="let disquera">
+                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <a *ngIf="permiso.puedeEditar(Seccion.Disquera)"
+                                [routerLink]="['actualizar', disquera.disqueraId]" class="btn btn-info btn-block"><i
+                                    class="fa-solid fa-pen-to-square"></i>
+                            </a>
+
+                            <button *ngIf="permiso.puedeEliminar(Seccion.Disquera)" class="btn btn-danger"
+                                (click)="borrar(disquera.disqueraId)">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <p *ngIf="dataSource.data.length === 0" class="text-center">No hay disqueras registrados.</p>
+        </div>
+    </div>
+    <div class="paginator-container">
+        <mat-paginator [pageSize]="pageSize"></mat-paginator>
+    </div>
+</div>

@@ -1,0 +1,107 @@
+<div class="inicio-card input-group flex-nowrap">
+    <a class="btn btn-primary" [routerLink]="['agregar']" *ngIf="permiso.puedeCrear(Seccion.Instrumento)">Agregar</a>
+    <span class="input-group-text" id="addon-wrapping"><i class="fa-solid fa-magnifying-glass"></i></span>
+    <input *ngIf="!tabla" #inputMaterial matInput placeholder="Buscar" class="form-control bg-dark text-white mb-2"
+        (keyup)="applyFilter($event)" autofocus>
+
+    <input *ngIf="tabla" type="text" class="form-control bg-dark text-white mb-2" placeholder="Buscar"
+        [(ngModel)]="search" autofocus>
+
+    <a *ngIf="tabla" type="button" class="btn btn-outline-light" (click)="cambiarVista()">
+        <i class="fa-solid fa-list"></i>
+    </a>
+    <a *ngIf="!tabla" type="button" class="btn btn-outline-light" (click)="cambiarVista()">
+        <i class="fa-solid fa-table"></i>
+    </a>
+
+    <!-- Exportar -->
+    <app-export-button [action]="export.bind(this)" color="success" [outline]="true"
+        extraClass="me-2"></app-export-button>
+</div>
+
+<label *ngIf="tabla">Total: {{ (Instrumentos | customGlobalFilter:search).length }} registros</label>
+
+<div class="container-scroll row" [hidden]="!tabla">
+    <div class="col-md-4" *ngFor="let instrumento of Instrumentos | customGlobalFilter:search"
+        style="margin-bottom: 1.5rem;">
+        <div class="card text-center">
+            <div class="card-header text-white d-flex justify-content-between align-items-center">
+                {{instrumento.nombre}}
+
+                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                    <button *ngIf="permiso.puedeEliminar(Seccion.Instrumento)" class="btn btn-danger"
+                        (click)="borrar(instrumento.instrumentoId)">
+                        <i class="far fa-trash-alt"></i>
+                    </button>
+
+                    <button *ngIf="!show" class="btn btn-primary" (click)="show = !show">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </button>
+                    <button *ngIf="show" class="btn btn-primary" (click)="show = !show">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="box">
+                <img [src]="instrumento.foto == '' ? '/assets/noImagen.png' : instrumento.foto "
+                    alt="Imagen del Instrumento" (error)="funciones.imagenNoValida($event)" loading="lazy">
+            </div>
+            <div class="card-body" *ngIf="show">
+                <p style="font-weight: bold;">Descripcion</p>
+                <p>{{instrumento.descripcion}}</p>
+                <a *ngIf="permiso.puedeEditar(Seccion.Instrumento)"
+                    [routerLink]="['actualizar', instrumento.instrumentoId]" class="btn btn-info btn-block">Editar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div [hidden]="tabla">
+    <div class="container-scroll">
+        <div class="table-wrapper">
+            <table mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="instrumentoId">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                    <td mat-cell *matCellDef="let instrumento">{{ instrumento.instrumentoId }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+                    <td mat-cell *matCellDef="let instrumento">{{ instrumento.nombre }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="descripcion">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripcion</th>
+                    <td mat-cell *matCellDef="let instrumento">{{ instrumento.descripcion }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                    <td mat-cell *matCellDef="let instrumento">
+                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <a *ngIf="permiso.puedeEditar(Seccion.Instrumento)"
+                                [routerLink]="['actualizar', instrumento.instrumentoId]"
+                                class="btn btn-info btn-block"><i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+
+                            <button *ngIf="permiso.puedeEliminar(Seccion.Instrumento)" class="btn btn-danger"
+                                (click)="borrar(instrumento.instrumentoId)">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <p *ngIf="dataSource.data.length === 0" class="text-center">No hay instrumentos registrados.</p>
+        </div>
+    </div>
+    <div class="paginator-container">
+        <mat-paginator [pageSize]="pageSize"></mat-paginator>
+    </div>
+</div>

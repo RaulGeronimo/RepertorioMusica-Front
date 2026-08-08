@@ -1,0 +1,82 @@
+<div class="scroll-form row">
+    <div class="col-md-6 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+
+                    <!-- Nombre -->
+                    <div class="card-body">
+                        <input type="text" formControlName="Nombre" [(ngModel)]="pais.nombre"
+                            placeholder="Nombre del Pais:" class="form-control" autofocus
+                            [class.is-invalid]="form.get('Nombre')?.invalid && form.get('Nombre')?.touched"
+                            [class.is-valid]="form.get('Nombre')?.valid">
+
+                        <span *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+                            El campo <span class="alerta">nombre</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Nacionalidad -->
+                    <div class="card-body">
+                        <input type="text" formControlName="Nacionalidad" [(ngModel)]="pais.nacionalidad"
+                            placeholder="Nacionalidad del Pais:" class="form-control" autofocus
+                            [class.is-invalid]="form.get('Nacionalidad')?.invalid && form.get('Nacionalidad')?.touched"
+                            [class.is-valid]="form.get('Nacionalidad')?.valid">
+
+                        <span
+                            *ngIf="form.get('Nacionalidad')?.hasError('required') && form.get('Nacionalidad')?.touched">
+                            El campo <span class="alerta">Nacionalidad</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Continente -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label class="input-group-text" for="ContinenteId">Continente</label>
+                            <select formControlName="ContinenteId" [(ngModel)]="pais.continenteId" class="form-control"
+                                id="ContinenteId"
+                                [class.is-invalid]="form.get('ContinenteId')?.invalid && form.get('ContinenteId')?.touched"
+                                [class.is-valid]="form.get('ContinenteId')?.valid">
+                                <option selected disabled value="0">Selecciona el Continente</option>
+                                <option *ngFor="let c of Continentes" [value]="c.ContinenteId">{{c.Continente}}</option>
+                            </select>
+                        </div>
+
+                        <span *ngIf="form.get('ContinenteId')?.hasError('noCero') && form.get('ContinenteId')?.touched">
+                            El campo <span class="alerta">Continente</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Bandera -->
+                    <div class="card-body">
+                        <input type="url" formControlName="Bandera" [(ngModel)]="pais.bandera"
+                            placeholder="Bandera del Pais:" class="form-control" autofocus
+                            [class.is-invalid]="form.get('Bandera')?.invalid && form.get('Bandera')?.touched"
+                            [class.is-valid]="form.get('Bandera')?.valid">
+
+                        <span *ngIf="form.get('Bandera')?.hasError('required') && form.get('Bandera')?.touched">
+                            El campo <span class="alerta">Bandera</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+                        <button *ngIf="!edit" class="btn btn-primary" [routerLink]="['..']">Regresar</button>
+                        <button *ngIf="edit" class="btn btn-primary" [routerLink]="['../../']">Regresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 inicio-card">
+        <div class="card card-body text-center">
+            <img [src]="pais.bandera || '/assets/noImagen.png'" (error)="funciones.imagenNoValida($event)"
+                class="card-img-top">
+            <h3 style="text-transform: uppercase;">
+                {{pais.paisId}} - {{pais.nombre == '' ? 'Nombre del Pais' : pais.nombre}}</h3>
+            <p>{{pais.continenteId ? getNombreContinentes(pais.continenteId) : 'Continente del País'}}</p>
+            <p>{{pais.nacionalidad == '' ? 'Nacionalidad' : pais.nacionalidad}}</p>
+        </div>
+    </div>
+</div>

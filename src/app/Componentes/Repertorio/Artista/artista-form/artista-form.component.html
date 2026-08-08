@@ -1,0 +1,194 @@
+<div class="scroll-form row">
+    <div class="col-md-6 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+
+                    <!-- Nombre -->
+                    <div class="card-body">
+                        <input type="text" formControlName="Nombre" [(ngModel)]="artista.nombre"
+                            placeholder="Nombre del Artista:" class="form-control" autofocus
+                            [class.is-invalid]="form.get('Nombre')?.invalid && form.get('Nombre')?.touched"
+                            [class.is-valid]="form.get('Nombre')?.valid">
+
+                        <span *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+                            El campo <span class="alerta">nombre</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Nombre Artistico -->
+                    <div class="card-body">
+                        <input type="text" formControlName="NombreArtistico" [(ngModel)]="artista.nombreArtistico"
+                            placeholder="Nombre Artistico:" class="form-control"
+                            [class.is-invalid]="form.get('NombreArtistico')?.invalid && form.get('NombreArtistico')?.touched"
+                            [class.is-valid]="form.get('NombreArtistico')?.valid">
+
+                        <span
+                            *ngIf="form.get('NombreArtistico')?.hasError('required') && form.get('NombreArtistico')?.touched">
+                            El campo <span class="alerta">nombre artistico</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Genero -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label class="input-group-text" for="actividad">Genero</label>
+                            <select formControlName="GeneroId" [(ngModel)]="artista.generoId" class="form-control"
+                                id="actividad"
+                                [class.is-invalid]="form.get('GeneroId')?.invalid && form.get('GeneroId')?.touched"
+                                [class.is-valid]="form.get('GeneroId')?.valid">
+                                <option selected disabled value="0">Selecciona un Genero</option>
+                                <option *ngFor="let g of Generos" [value]="g.GeneroId">{{g.Genero}}</option>
+                            </select>
+                        </div>
+
+                        <span *ngIf="form.get('GeneroId')?.hasError('noCero') && form.get('GeneroId')?.touched">
+                            El campo <span class="alerta">Género</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Nacimiento -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label for="Nacimiento" class="input-group-text">Fecha de Nacimiento</label>
+                            <input id="Nacimiento" type="date" [(ngModel)]="artista.fechaNacimiento"
+                                formControlName="FechaNacimiento" class="form-control"
+                                [class.is-invalid]="form.get('FechaNacimiento')?.invalid && form.get('FechaNacimiento')?.touched"
+                                [class.is-valid]="form.get('FechaNacimiento')?.valid" max="9999-12-31" />
+                        </div>
+
+                        <span
+                            *ngIf="form.get('FechaNacimiento')?.hasError('required') && form.get('FechaNacimiento')?.touched">
+                            El campo <span class="alerta">fecha Nacimiento</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Finado -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label for="Finado" class="input-group-text">Fecha de Finado</label>
+                            <input id="Finado" type="date" [(ngModel)]="artista.fechaFinado"
+                                formControlName="FechaFinado" class="form-control" max="9999-12-31" />
+                        </div>
+                        <span *ngIf="form.get('FechaFinado')?.hasError('FechaFinadoMayorQueFechaNacimiento')">
+                            El campo <span class="alerta">fecha finado</span> debe ser mayor a <strong>Fecha
+                                Nacimiento</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Estatura -->
+                    <div class="card-body">
+                        <input type="number" formControlName="Estatura" [(ngModel)]="artista.estatura"
+                            placeholder="Estatura:" class="form-control"
+                            [class.is-invalid]="form.get('Estatura')?.invalid && form.get('Estatura')?.touched"
+                            [class.is-valid]="form.get('Estatura')?.valid">
+
+                        <span *ngIf="form.get('Estatura')?.hasError('required') && form.get('Estatura')?.touched">
+                            El campo <span class="alerta">estatura</span> es <strong>Requerido</strong>.
+                        </span>
+                        <span *ngIf="form.get('Estatura')?.hasError('min') && form.get('Estatura')?.touched">
+                            El campo <span class="alerta">estatura</span> es <strong>invalido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Nacionalidad -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <!-- <label class="input-group-text" for="inputGroupSelect02">Nacionalidad</label> -->
+                             <input type="text" formControlName="Nacionalidad" [(ngModel)]="search" placeholder="Nacionalidad:"
+                                class="form-control"
+                                [class.is-invalid]="form.get('PaisId')?.invalid && form.get('PaisId')?.touched"
+                                [class.is-valid]="form.get('PaisId')?.valid">
+
+                            <select *ngIf="search != null || edit" formControlName="PaisId" [(ngModel)]="artista.paisId" class="form-control"
+                                id="inputGroupSelect02"
+                                [class.is-invalid]="form.get('PaisId')?.invalid && form.get('PaisId')?.touched"
+                                [class.is-valid]="form.get('PaisId')?.valid">
+                                <option selected disabled value="0">Selecciona una Nacionalidad</option>
+                                <option *ngFor="let pais of Paises | customGlobalFilter:search" value="{{pais.paisId}}">{{pais.nombre}}</option>
+                            </select>
+
+                            <button type="button" class="btn btn-primary" (click)="refrescarPaises()"
+                                title="Refrescar paises">
+                                ↻
+                            </button>
+                        </div>
+
+                        <span *ngIf="form.get('PaisId')?.hasError('noCero') && form.get('PaisId')?.touched">
+                            El campo <span class="alerta">País</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Instrumentos -->
+                    <div class="card-body">
+                        <textarea formControlName="Instrumentos" [(ngModel)]="artista.instrumentos"
+                            placeholder="Instrumentos:" rows="2" class="form-control"
+                            [class.is-invalid]="form.get('Instrumentos')?.invalid && form.get('Instrumentos')?.touched"
+                            [class.is-valid]="form.get('Instrumentos')?.valid"></textarea>
+
+                        <span
+                            *ngIf="form.get('Instrumentos')?.hasError('required') && form.get('Instrumentos')?.touched">
+                            El campo <span class="alerta">fecha Nacimiento</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- TipoVoz -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label class="input-group-text" for="inputGroupSelect02">Tipo de Voz</label>
+                            <select formControlName="TipoVozId" [(ngModel)]="artista.tipoVozId" class="form-control"
+                                id="inputGroupSelect02"
+                                [class.is-invalid]="form.get('TipoVozId')?.invalid && form.get('TipoVozId')?.touched"
+                                [class.is-valid]="form.get('TipoVozId')?.valid">
+                                <option selected disabled value="0">Selecciona un tipo de Voz</option>
+                                <option *ngFor="let voz of TipoVoces" value="{{voz.TipoVozId}}">{{voz.TipoVoz}}</option>
+                            </select>
+                        </div>
+
+                        <span *ngIf="form.get('TipoVozId')?.hasError('noCero') && form.get('TipoVozId')?.touched">
+                            El campo <span class="alerta">tipo voz</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Foto -->
+                    <div class="card-body">
+                        <input type="url" formControlName="Foto" [(ngModel)]="artista.foto" placeholder="Foto:"
+                            class="form-control"
+                            [class.is-invalid]="form.get('Foto')?.invalid && form.get('Foto')?.touched"
+                            [class.is-valid]="form.get('Foto')?.valid">
+
+                        <span *ngIf="form.get('Foto')?.hasError('required') && form.get('Foto')?.touched">
+                            El campo <span class="alerta">foto</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+                        <button *ngIf="!edit" class="btn btn-primary" [routerLink]="['..']">Regresar</button>
+                        <button *ngIf="edit" class="btn btn-primary" [routerLink]="['../../']">Regresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 inicio-card">
+        <div class="card card-body text-center">
+            <img [src]="artista.foto == '' ? '/assets/noImagen.png' : artista.foto " class="card-img-top"
+                (error)="funciones.imagenNoValida($event)">
+            <h3 style="text-transform: uppercase;">
+                {{artista.artistaId}} - {{artista.nombre == '' ? 'Nombre del Artista' : artista.nombre}}
+            </h3>
+            <p>{{artista.nombreArtistico == '' ? 'Nombre Artistico' : artista.nombreArtistico}}</p>
+            <p>{{artista.generoId ? getNombreGenero(artista.generoId) : 'Género del Artista'}}</p>
+            <p>{{artista.fechaNacimiento == ''? 'Fecha de Nacimiento' :
+                (artista.fechaNacimiento | date: 'dd / MMMM / yyyy')}}
+            </p>
+            <p>{{artista.fechaFinado == ''? 'Finado' : (artista.fechaFinado | date: 'dd / MMMM / yyyy')}}</p>
+            <p>{{artista.estatura == '' ? 'Estatura' : artista.estatura + ' m' }}</p>
+            <p>{{artista.paisId ? getNombrePais(artista.paisId) : 'País del Artista'}}</p>
+            <p>{{artista.instrumentos == '' ? 'Instrumentos' : artista.instrumentos}}</p>
+            <p>{{artista.tipoVozId ? getNombreTipoVoz(artista.tipoVozId) : 'Tipo de Voz del Artista'}}</p>
+        </div>
+    </div>
+</div>

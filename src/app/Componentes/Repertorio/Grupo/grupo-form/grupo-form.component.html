@@ -1,0 +1,160 @@
+<div class="scroll-form row">
+  <div class="col-md-6 offset-md-2">
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+
+          <!-- Nombre -->
+          <div class="card-body">
+            <input type="text" formControlName="Nombre" [(ngModel)]="grupo.nombre" placeholder="Nombre del Grupo:"
+              class="form-control" autofocus
+              [class.is-invalid]="form.get('Nombre')?.invalid && form.get('Nombre')?.touched"
+              [class.is-valid]="form.get('Nombre')?.valid">
+
+            <span *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+              El campo <span class="alerta">nombre</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Origen -->
+          <div class="card-body">
+            <input type="text" formControlName="Origen" [(ngModel)]="grupo.origen" placeholder="Origen del Grupo:"
+              class="form-control" [class.is-invalid]="form.get('Origen')?.invalid && form.get('Origen')?.touched"
+              [class.is-valid]="form.get('Origen')?.valid">
+
+            <span *ngIf="form.get('Origen')?.hasError('required') && form.get('Origen')?.touched">
+              El campo <span class="alerta">Origen</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Genero -->
+          <div class="card-body">
+            <textarea formControlName="Genero" [(ngModel)]="grupo.genero" placeholder="Genero del Grupo:" rows="2"
+              class="form-control" [class.is-invalid]="form.get('Genero')?.invalid && form.get('Genero')?.touched"
+              [class.is-valid]="form.get('Genero')?.valid"></textarea>
+
+            <span *ngIf="form.get('Genero')?.hasError('required') && form.get('Genero')?.touched">
+              El campo <span class="alerta">Genero</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Inicio -->
+          <div class="card-body">
+            <div class="input-group">
+              <label for="inputInicio" class="input-group-text">Inicio del Grupo</label>
+              <input id="inputInicio" type="date" [(ngModel)]="grupo.inicio" formControlName="Inicio"
+                class="form-control" [class.is-invalid]="form.get('Inicio')?.invalid && form.get('Inicio')?.touched"
+                [class.is-valid]="form.get('Inicio')?.valid" max="9999-12-31" />
+            </div>
+
+            <span *ngIf="form.get('Inicio')?.hasError('required') && form.get('Inicio')?.touched">
+              El campo <span class="alerta">Inicio</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Fin -->
+          <div class="card-body">
+            <div class="input-group">
+              <label for="inputFin" class="input-group-text">Fin del Grupo</label>
+              <input id="inputFin" type="date" [(ngModel)]="grupo.fin" formControlName="Fin" class="form-control"
+                max="9999-12-31" />
+            </div>
+            <span *ngIf="form.get('Fin')?.hasError('FinMayorQueInicio')">
+              El campo <span class="alerta">Inicio</span> debe ser mayor a <strong>Fin</strong>.
+            </span>
+          </div>
+
+          <!-- Sellos -->
+          <div class="card-body">
+            <textarea formControlName="Sellos" [(ngModel)]="grupo.sellos" placeholder="Sellos discograficos:" rows="2"
+              class="form-control" [class.is-invalid]="form.get('Sellos')?.invalid && form.get('Sellos')?.touched"
+              [class.is-valid]="form.get('Sellos')?.valid"></textarea>
+
+            <span *ngIf="form.get('Sellos')?.hasError('required') && form.get('Sellos')?.touched">
+              El campo <span class="alerta">Sellos</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Estado -->
+          <div class="card-body">
+            <div class="input-group">
+              <label class="input-group-text" for="actividad">Estatus</label>
+              <select formControlName="EstatusId" [(ngModel)]="grupo.estatusId" class="form-control" id="actividad"
+                [class.is-invalid]="form.get('EstatusId')?.invalid && form.get('EstatusId')?.touched"
+                [class.is-valid]="form.get('EstatusId')?.valid">
+                <option selected disabled value="0">Selecciona un Estatus</option>
+                <option *ngFor="let e of Estatus" [value]="e.EstatusId">{{e.Estatus}}</option>
+              </select>
+            </div>
+
+            <span *ngIf="form.get('EstatusId')?.hasError('noCero') && form.get('EstatusId')?.touched">
+              El campo <span class="alerta">Estatus</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- SitioWeb -->
+          <div class="card-body">
+            <input type="url" formControlName="SitioWeb" [(ngModel)]="grupo.sitioWeb" placeholder="Sitio Web:"
+              class="form-control" [class.is-invalid]="form.get('SitioWeb')?.invalid && form.get('SitioWeb')?.touched"
+              [class.is-valid]="form.get('SitioWeb')?.valid">
+
+            <span *ngIf="form.get('SitioWeb')?.hasError('required') && form.get('SitioWeb')?.touched">
+              El campo <span class="alerta">Sitio Web</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Idioma -->
+          <div class="card-body">
+            <div class="input-group">
+              <label class="input-group-text" for="IdiomaId">Idioma</label>
+              <select formControlName="IdiomaId" [(ngModel)]="grupo.idiomaId" class="form-control" id="IdiomaId"
+                [class.is-invalid]="form.get('IdiomaId')?.invalid && form.get('IdiomaId')?.touched"
+                [class.is-valid]="form.get('IdiomaId')?.valid">
+                <option selected disabled value="0">Selecciona el Idioma</option>
+                <option *ngFor="let i of Idiomas" [value]="i.IdiomaId">{{i.Idioma}}</option>
+              </select>
+            </div>
+
+            <span *ngIf="form.get('IdiomaId')?.hasError('noCero') && form.get('IdiomaId')?.touched">
+              El campo <span class="alerta">Idioma</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <!-- Logo -->
+          <div class="card-body">
+            <input type="url" formControlName="Logo" [(ngModel)]="grupo.logo" placeholder="Logo:" class="form-control"
+              [class.is-invalid]="form.get('Logo')?.invalid && form.get('Logo')?.touched"
+              [class.is-valid]="form.get('Logo')?.valid">
+
+            <span *ngIf="form.get('Logo')?.hasError('required') && form.get('Logo')?.touched">
+              El campo <span class="alerta">Logo</span> es <strong>Requerido</strong>.
+            </span>
+          </div>
+
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+            <button class="btn btn-primary" (click)="regresar()">Regresar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 inicio-card">
+    <div class="card card-body text-center">
+      <img [src]="grupo.logo == '' ? '/assets/noImagen.png' : grupo.logo " class="card-img-top"
+        (error)="funciones.imagenNoValida($event)">
+      <h3 style="text-transform: uppercase;">
+        {{grupo.grupoId}} - {{grupo.nombre == '' ? 'Nombre del Grupo' : grupo.nombre}}
+      </h3>
+      <p>{{grupo.origen == '' ? 'Origen' : grupo.origen}}</p>
+      <p>{{grupo.genero == '' ? 'Genero' : grupo.genero}}</p>
+      <p>{{grupo.inicio == ''? 'Inicio' : (grupo.inicio | date: 'dd / MMMM / yyyy')}}</p>
+      <p>{{grupo.fin == ''? 'Fin' : (grupo.fin | date: 'dd / MMMM / yyyy')}}</p>
+      <p>{{grupo.sellos == '' ? 'Sellos Discograficos' : grupo.sellos}}</p>
+      <p>{{grupo.estatusId ? getNombreEstatus(grupo.estatusId) : 'Estado del Grupo'}}</p>
+      <p><a href="{{grupo.sitioWeb}}" target="_blank">{{grupo.sitioWeb == '' ? 'Sitio Web' : grupo.sitioWeb}}</a></p>
+      <p>{{grupo.idiomaId == 0 ? 'Idioma' : getNombreIdioma(grupo.idiomaId || 0)}}</p>
+    </div>
+  </div>
+</div>

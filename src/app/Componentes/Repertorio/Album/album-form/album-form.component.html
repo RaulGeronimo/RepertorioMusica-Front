@@ -1,0 +1,154 @@
+<div class="scroll-form row">
+    <div class="col-md-6 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+
+                    <!-- Nombre -->
+                    <div class="card-body">
+                        <input type="text" formControlName="Nombre" [(ngModel)]="album.nombre"
+                            placeholder="Nombre del Album:" class="form-control"
+                            [class.is-invalid]="form.get('Nombre')?.invalid && form.get('Nombre')?.touched"
+                            [class.is-valid]="form.get('Nombre')?.valid" autofocus>
+
+                        <span *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+                            El campo <span class="alerta">nombre</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Grupo -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <input type="text" formControlName="Grupo" [(ngModel)]="search" placeholder="Grupo:"
+                                class="form-control"
+                                [class.is-invalid]="form.get('GrupoId')?.invalid && form.get('GrupoId')?.touched"
+                                [class.is-valid]="form.get('GrupoId')?.valid">
+
+                            <select *ngIf="search != null || edit" formControlName="GrupoId" [(ngModel)]="album.grupoId"
+                                class="form-control" id="inputGroupSelect02"
+                                [class.is-invalid]="form.get('GrupoId')?.invalid && form.get('GrupoId')?.touched"
+                                [class.is-valid]="form.get('GrupoId')?.valid">
+                                <option selected disabled value=0>Selecciona un Grupo</option>
+                                <option *ngFor="let grupo of Grupos | customGlobalFilter:search"
+                                    value="{{grupo.grupoId}}">{{grupo.nombre}}</option>
+                            </select>
+
+                            <button type="button" class="btn btn-primary" (click)="refrescarGrupos()"
+                                title="Refrescar grupos">
+                                ↻
+                            </button>
+                        </div>
+
+                        <span *ngIf="form.get('GrupoId')?.hasError('noCero') && form.get('GrupoId')?.touched">
+                            El campo <span class="alerta">Grupo</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Disquera -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <input type="text" formControlName="Disquera" [(ngModel)]="searchDisquera"
+                                placeholder="Disquera:" class="form-control"
+                                [class.is-invalid]="form.get('DisqueraId')?.invalid && form.get('DisqueraId')?.touched"
+                                [class.is-valid]="form.get('DisqueraId')?.valid">
+
+                            <select *ngIf="searchDisquera != null || edit" formControlName="DisqueraId"
+                                [(ngModel)]="album.disqueraId" class="form-control" id="inputGroupSelect02"
+                                [class.is-invalid]="form.get('DisqueraId')?.invalid && form.get('DisqueraId')?.touched"
+                                [class.is-valid]="form.get('DisqueraId')?.valid">
+                                <option selected disabled value=0>Selecciona una Disquera</option>
+                                <option *ngFor="let disquera of Disqueras | customGlobalFilter:searchDisquera"
+                                    value="{{disquera.disqueraId}}">{{disquera.nombre}}</option>
+                            </select>
+
+                            <button type="button" class="btn btn-primary" (click)="refrescarDisqueras()"
+                                title="Refrescar disqueras">
+                                ↻
+                            </button>
+                        </div>
+
+                        <span *ngIf="form.get('DisqueraId')?.hasError('noCero') && form.get('DisqueraId')?.touched">
+                            El campo <span class="alerta">Disquera</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Duracion -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label for="Duracion" class="input-group-text">Duracion</label>
+                            <input id="Duracion" type="time" step="2" [(ngModel)]="album.duracion"
+                                formControlName="Duracion" class="form-control"
+                                [class.is-invalid]="form.get('Duracion')?.invalid && form.get('Duracion')?.touched"
+                                [class.is-valid]="form.get('Duracion')?.valid">
+                        </div>
+
+                        <span *ngIf="form.get('Duracion')?.hasError('required') && form.get('Duracion')?.touched">
+                            El campo <span class="alerta">Duracion</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Lanzamiento -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label for="Lanzamiento" class="input-group-text">Fecha de Lanzamiento</label>
+                            <input id="Lanzamiento" type="date" [(ngModel)]="album.lanzamiento"
+                                formControlName="Lanzamiento" class="form-control"
+                                [class.is-invalid]="form.get('Lanzamiento')?.invalid && form.get('Lanzamiento')?.touched"
+                                [class.is-valid]="form.get('Lanzamiento')?.valid" max="9999-12-31" />
+                        </div>
+
+                        <span *ngIf="form.get('Lanzamiento')?.hasError('required') && form.get('Lanzamiento')?.touched">
+                            El campo <span class="alerta">Lanzamiento</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Grabacion -->
+                    <div class="card-body">
+                        <input type="text" formControlName="Grabacion" [(ngModel)]="album.grabacion"
+                            placeholder="Grabacion del Album:" class="form-control"
+                            [class.is-invalid]="form.get('Grabacion')?.invalid && form.get('Grabacion')?.touched"
+                            [class.is-valid]="form.get('Grabacion')?.valid">
+
+                        <span *ngIf="form.get('Grabacion')?.hasError('required') && form.get('Grabacion')?.touched">
+                            El campo <span class="alerta">Grabacion</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Portada -->
+                    <div class="card-body">
+                        <input type="text" formControlName="Portada" [(ngModel)]="album.portada" placeholder="Portada:"
+                            class="form-control"
+                            [class.is-invalid]="form.get('Portada')?.invalid && form.get('Portada')?.touched"
+                            [class.is-valid]="form.get('Portada')?.valid">
+
+                        <span *ngIf="form.get('Portada')?.hasError('required') && form.get('Portada')?.touched">
+                            El campo <span class="alerta">Portada</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+                        <!-- <button *ngIf="!edit" class="btn btn-primary" [routerLink]="['..']">Regresar</button>
+                        <button *ngIf="edit" class="btn btn-primary" [routerLink]="['../../']">Regresar</button> -->
+                        <button type="button" class="btn btn-primary" (click)="regresar()">Regresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 inicio-card">
+        <div class="card card-body text-center">
+            <img [src]="album.portada == '' ? '/assets/noImagen.png' : album.portada " class="card-img-top">
+            <h3 style="text-transform: uppercase;">
+                {{album.albumId}} - {{album.nombre == '' ? 'Nombre del Álbum' : album.nombre}}
+            </h3>
+            <p>{{album.grupoId ? getNombreGrupo(album.grupoId) : 'Álbum del Grupo'}}</p>
+            <p>{{album.disqueraId ? getNombreDisquera(album.disqueraId) : 'Disquera del Álbum'}}</p>
+            <p>{{album.duracion == '' ? 'Duración' : album.duracion}}</p>
+            <p>{{album.lanzamiento == ''? 'Lanzamiento' : (album.lanzamiento | date: 'dd / MMMM / yyyy')}}</p>
+            <p>{{album.grabacion == '' ? 'Grabación' : album.grabacion}}</p>
+        </div>
+    </div>
+</div>
