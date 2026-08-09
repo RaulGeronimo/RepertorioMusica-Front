@@ -1,1 +1,117 @@
-<p>artista-grupo-form works!</p>
+<div class="scroll-form row">
+    <div class="col-md-6 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+
+                    <!-- Artista -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <input type="text" formControlName="Artista" [(ngModel)]="search" placeholder="Artista:"
+                                class="form-control"
+                                [class.is-invalid]="form.get('ArtistaId')?.invalid && form.get('ArtistaId')?.touched"
+                                [class.is-valid]="form.get('ArtistaId')?.valid">
+
+                            <select *ngIf="search != null || edit" formControlName="ArtistaId"
+                                [(ngModel)]="artistaGrupo.artistaId" class="form-control" id="inputGroupSelect02"
+                                [class.is-invalid]="form.get('ArtistaId')?.invalid && form.get('ArtistaId')?.touched"
+                                [class.is-valid]="form.get('ArtistaId')?.valid">
+                                <option selected disabled value=0>Selecciona un Artista</option>
+                                <option *ngFor="let artista of Artistas | customGlobalFilter:search"
+                                    value="{{artista.artistaId}}">{{artista.nombreArtistico}}</option>
+                            </select>
+
+                            <button type="button" class="btn btn-primary" (click)="refrescarArtistas()"
+                                title="Refrescar artistas">
+                                ↻
+                            </button>
+                        </div>
+
+                        <span *ngIf="form.get('ArtistaId')?.hasError('noCero') && form.get('ArtistaId')?.touched">
+                            El campo <span class="alerta">Artista</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Grupo -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <input type="text" formControlName="Grupo" [(ngModel)]="searchGrupo" placeholder="Grupo:"
+                                class="form-control"
+                                [class.is-invalid]="form.get('GrupoId')?.invalid && form.get('GrupoId')?.touched"
+                                [class.is-valid]="form.get('GrupoId')?.valid">
+
+                            <select *ngIf="searchGrupo != null || edit" formControlName="GrupoId"
+                                [(ngModel)]="artistaGrupo.grupoId" class="form-control" id="inputGroupSelect02"
+                                [class.is-invalid]="form.get('GrupoId')?.invalid && form.get('GrupoId')?.touched"
+                                [class.is-valid]="form.get('GrupoId')?.valid">
+                                <option selected disabled value=0>Selecciona un Grupo</option>
+                                <option *ngFor="let grupo of Grupo | customGlobalFilter:searchGrupo"
+                                    value="{{grupo.grupoId}}">{{grupo.nombre}}</option>
+                            </select>
+
+                            <button type="button" class="btn btn-primary" (click)="refrescarGrupos()"
+                                title="Refrescar grupos">
+                                ↻
+                            </button>
+                        </div>
+
+                        <span *ngIf="form.get('GrupoId')?.hasError('noCero') && form.get('GrupoId')?.touched">
+                            El campo <span class="alerta">Grupo</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Inicio -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label for="Nacimiento" class="input-group-text">Fecha de Inicio</label>
+                            <input id="Nacimiento" type="date" [(ngModel)]="artistaGrupo.fechaInicio"
+                                formControlName="FechaInicio" class="form-control"
+                                [class.is-invalid]="form.get('FechaInicio')?.invalid && form.get('FechaInicio')?.touched"
+                                [class.is-valid]="form.get('FechaInicio')?.valid" max="9999-12-31" />
+                        </div>
+
+                        <span *ngIf="form.get('FechaInicio')?.hasError('required') && form.get('FechaInicio')?.touched">
+                            El campo <span class="alerta">fecha Inicio</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Fin -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label for="Finado" class="input-group-text">Fecha de Fin</label>
+                            <input id="Finado" type="date" [(ngModel)]="artistaGrupo.fechaFin"
+                                formControlName="FechaFin" class="form-control" max="9999-12-31" />
+                        </div>
+                        <span *ngIf="form.get('FechaFin')?.hasError('FechaFinMayorQueFechaInicio')">
+                            El campo <span class="alerta">fecha fin</span> debe ser mayor a <strong>Fecha
+                                Inicio</strong>.
+                        </span>
+                    </div>
+
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+                        <button type="button" class="btn btn-primary" (click)="regresar()">Regresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 inicio-card">
+        <div class="card card-body text-center">
+            <img [src]="artistaGrupo.grupoId == 0 ? '/assets/noImagen.png' : getImgGrupo(artistaGrupo.grupoId ||0) "
+                class="card-img-top">
+            <h3 style="text-transform: uppercase;">
+                {{artistaGrupo.artistaGrupoId}} - {{artistaGrupo.artistaId == 0 ? 'Nombre del Artista' :
+                getNombreArtista(artistaGrupo.artistaId||0)}}
+            </h3>
+            <p>{{artistaGrupo.grupoId ? getNombreGrupo(artistaGrupo.grupoId) : 'Artista del Grupo'}}</p>
+
+            <p>{{artistaGrupo.fechaInicio == ''? 'Fecha de Inicio' :
+                (artistaGrupo.fechaInicio | date: 'dd / MMMM / yyyy')}}
+            </p>
+            <p>{{artistaGrupo.fechaFin == ''? 'Fecha de Fin' :
+                (artistaGrupo.fechaFin | date: 'dd / MMMM / yyyy')}}</p>
+        </div>
+    </div>
+</div>

@@ -23,7 +23,6 @@ form: FormGroup;
   }
 
   edit: boolean = false;
-  Continentes: any = [];
 
   constructor(
     private service: InstrumentoService,

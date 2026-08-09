@@ -1,1 +1,133 @@
-<p>canciones-form works!</p>
+<div class="scroll-form row">
+    <div class="col-md-6 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+
+                    <!-- Nombre -->
+                    <div class="card-body">
+                        <input type="text" formControlName="Nombre" [(ngModel)]="cancion.nombre"
+                            placeholder="Nombre de la Canción:" class="form-control"
+                            [class.is-invalid]="form.get('Nombre')?.invalid && form.get('Nombre')?.touched"
+                            [class.is-valid]="form.get('Nombre')?.valid" autofocus>
+
+                        <span *ngIf="form.get('Nombre')?.hasError('required') && form.get('Nombre')?.touched">
+                            El campo <span class="alerta">nombre</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Duracion -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label for="Duracion" class="input-group-text">Duracion</label>
+                            <input id="Duracion" type="time" step="2" [(ngModel)]="cancion.duracion"
+                                formControlName="Duracion" class="form-control"
+                                [class.is-invalid]="form.get('Duracion')?.invalid && form.get('Duracion')?.touched"
+                                [class.is-valid]="form.get('Duracion')?.valid">
+                        </div>
+
+                        <span *ngIf="form.get('Duracion')?.hasError('required') && form.get('Duracion')?.touched">
+                            El campo <span class="alerta">Duracion</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Publicación -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label for="Publicacion" class="input-group-text">Fecha de Lanzamiento</label>
+                            <input id="Publicacion" type="date" [(ngModel)]="cancion.publicacion"
+                                formControlName="Publicacion" class="form-control"
+                                [class.is-invalid]="form.get('Publicacion')?.invalid && form.get('Publicacion')?.touched"
+                                [class.is-valid]="form.get('Publicacion')?.valid" max="9999-12-31" />
+                        </div>
+
+                        <span *ngIf="form.get('Publicacion')?.hasError('required') && form.get('Publicacion')?.touched">
+                            El campo <span class="alerta">Lanzamiento</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Generos -->
+                    <div class="card-body">
+                        <textarea formControlName="Genero" [(ngModel)]="cancion.genero" placeholder="Generos:" rows="2"
+                            class="form-control"
+                            [class.is-invalid]="form.get('Genero')?.invalid && form.get('Genero')?.touched"
+                            [class.is-valid]="form.get('Genero')?.valid"></textarea>
+
+                        <span *ngIf="form.get('Genero')?.hasError('required') && form.get('Genero')?.touched">
+                            El campo <span class="alerta">Genero</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Interpretacion -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label class="input-group-text" for="InterpretacionId">Interpretacion</label>
+                            <select formControlName="InterpretacionId" [(ngModel)]="cancion.interpretacionId"
+                                class="form-control" id="InterpretacionId"
+                                [class.is-invalid]="form.get('InterpretacionId')?.invalid && form.get('InterpretacionId')?.touched"
+                                [class.is-valid]="form.get('InterpretacionId')?.valid">
+                                <option selected disabled value="0">Selecciona una Interpretación</option>
+                                <option *ngFor="let i of Interpretaciones" [value]="i.InterpretacionId">
+                                    {{i.Interpretacion}}</option>
+                            </select>
+                        </div>
+
+                        <span
+                            *ngIf="form.get('InterpretacionId')?.hasError('noCero') && form.get('InterpretacionId')?.touched">
+                            El campo <span class="alerta">Interpretacion</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Grupo -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <input type="text" formControlName="Grupo" [(ngModel)]="search" placeholder="Grupo:"
+                                class="form-control"
+                                [class.is-invalid]="form.get('GrupoId')?.invalid && form.get('GrupoId')?.touched"
+                                [class.is-valid]="form.get('GrupoId')?.valid">
+
+                            <select *ngIf="search != null || edit" formControlName="GrupoId"
+                                [(ngModel)]="cancion.grupoId" class="form-control" id="inputGroupSelect02"
+                                [class.is-invalid]="form.get('GrupoId')?.invalid && form.get('GrupoId')?.touched"
+                                [class.is-valid]="form.get('GrupoId')?.valid">
+                                <option selected disabled value=0>Selecciona un Grupo</option>
+                                <option *ngFor="let grupo of Grupos | customGlobalFilter:search"
+                                    value="{{grupo.grupoId}}">{{grupo.nombre}}</option>
+                            </select>
+
+                            <button type="button" class="btn btn-primary" (click)="refrescarGrupos()"
+                                title="Refrescar grupos">
+                                ↻
+                            </button>
+                        </div>
+
+                        <span *ngIf="form.get('GrupoId')?.hasError('noCero') && form.get('GrupoId')?.touched">
+                            El campo <span class="alerta">Grupo</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+
+                    <!-- Botones -->
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+                        <button type="button" class="btn btn-primary" (click)="regresar()">Regresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 inicio-card">
+        <div class="card card-body text-center">
+            <h3 style="text-transform: uppercase;">
+                {{cancion.cancionId}} - {{cancion.nombre == '' ? 'Nombre de la Canción' : cancion.nombre}}
+            </h3>
+            <p>{{cancion.duracion == '' ? 'Duración' : cancion.duracion}}</p>
+            <p>{{cancion.publicacion == ''? 'Publicación' : (cancion.publicacion | date: 'dd / MMMM / yyyy')}}</p>
+            <p>{{cancion.genero == '' ? 'Géneros' : cancion.genero}}</p>
+            <p>{{cancion.interpretacionId? getNombreInterpretacion(cancion.interpretacionId) :
+                'Interpretación de la Canción'}}</p>
+            <p>{{cancion.grupoId ? getNombreGrupo(cancion.grupoId) : 'Canción del Grupo'}}</p>
+        </div>
+    </div>
+</div>

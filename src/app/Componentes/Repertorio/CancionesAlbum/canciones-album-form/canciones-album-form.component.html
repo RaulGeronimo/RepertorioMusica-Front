@@ -1,1 +1,100 @@
-<p>canciones-album-form works!</p>
+<div class="scroll-form row">
+    <div class="col-md-6 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+
+                    <!-- Grupo -->
+                    <div class="card-body">
+                        <input type="text" formControlName="Grupo" [(ngModel)]="search" placeholder="Grupo:"
+                            class="form-control" autofocus>
+                    </div>
+
+                    <!-- Album -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label class="input-group-text" for="inputGroupSelect01">Album</label>
+                            <select formControlName="AlbumId" [(ngModel)]="cancionAlbum.albumId" class="form-control"
+                                id="inputGroupSelect01"
+                                [class.is-invalid]="form.get('AlbumId')?.invalid && form.get('AlbumId')?.touched"
+                                [class.is-valid]="form.get('AlbumId')?.valid">
+                                <option selected disabled value=0>Selecciona un Album</option>
+                                <option *ngFor="let Album of Albumes | customGlobalFilter:search"
+                                    value="{{Album.albumId}}">
+                                    {{Album.nombre}}</option>
+                            </select>
+
+                            <button type="button" class="btn btn-primary" (click)="refrescarAlbumes()"
+                                title="Refrescar álbumes">
+                                ↻
+                            </button>
+                        </div>
+
+                        <span *ngIf="form.get('AlbumId')?.hasError('noCero') && form.get('AlbumId')?.touched">
+                            El campo <span class="alerta">Album</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Cancion -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <label class="input-group-text" for="inputGroupSelect02">Cancion</label>
+                            <select formControlName="CancionId" [(ngModel)]="cancionAlbum.cancionId"
+                                class="form-control" id="inputGroupSelect02"
+                                [class.is-invalid]="form.get('CancionId')?.invalid && form.get('CancionId')?.touched"
+                                [class.is-valid]="form.get('CancionId')?.valid">
+                                <option selected disabled value=0>Selecciona una Cancion</option>
+                                <option *ngFor="let Canciones of Canciones | customGlobalFilter:search"
+                                    value="{{Canciones.cancionId}}">
+                                    {{Canciones.nombre}}</option>
+                            </select>
+
+                            <button type="button" class="btn btn-primary" (click)="refrescarCanciones()"
+                                title="Refrescar canciones">
+                                ↻
+                            </button>
+                        </div>
+
+                        <span *ngIf="form.get('CancionId')?.hasError('noCero') && form.get('CancionId')?.touched">
+                            El campo <span class="alerta">Cancion</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Numero -->
+                    <div class="card-body">
+                        <input type="number" step="1" formControlName="Numero" [(ngModel)]="cancionAlbum.numero"
+                            placeholder="Numero:" class="form-control"
+                            [class.is-invalid]="form.get('Numero')?.invalid && form.get('Numero')?.touched"
+                            [class.is-valid]="form.get('Numero')?.valid">
+
+                        <span *ngIf="form.get('Numero')?.invalid && form.get('Numero')?.touched">
+                            El campo <span class="alerta">número</span> es <strong>Requerido</strong>.
+                        </span>
+                        <span *ngIf="form.get('Numero')?.hasError('pattern') && form.get('Numero')?.touched">
+                            El campo <span class="alerta">Número</span> debe ser un <strong>entero</strong>.
+                        </span>
+                    </div>
+
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+                        <button type="button" class="btn btn-primary" (click)="regresar()">Regresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 inicio-card">
+        <div class="card card-body text-center">
+            <img [src]="cancionAlbum.albumId == 0 ? '/assets/noImagen.png' : getImgAlbum(cancionAlbum.albumId ||0) "
+                class="card-img-top">
+
+            <h3 style="text-transform: uppercase;">
+                {{cancionAlbum.cancionAlbumId}} - {{cancionAlbum.cancionId == 0 ? 'Nombre de la Canción' :
+                getNombreCancion(cancionAlbum.cancionId||0)}}
+            </h3>
+            <p>{{cancionAlbum.albumId ? getNombreAlbum(cancionAlbum.albumId) : 'Álbum de la Canción'}}</p>
+            <p>{{cancionAlbum.albumId == 0 ? 'Número' : cancionAlbum.albumId }}</p>
+        </div>
+    </div>
+</div>

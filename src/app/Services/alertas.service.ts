@@ -10,6 +10,10 @@ import { ArtistaService } from './artista.service';
 import { GrupoService } from './grupo.service';
 import { DisqueraService } from './disquera.service';
 import { AlbumService } from './album.service';
+import { CancionService } from './cancion.service';
+import { ArtistaGrupoService } from './artista-grupo.service';
+import { CancionAlbumService } from './cancion-album.service';
+import { InstrumentoArtistaGrupoService } from './instrumento-artista-grupo.service';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +38,11 @@ export class AlertasService {
     private grupoService: GrupoService,
     private disqueraService: DisqueraService,
     private albumService: AlbumService,
-  ) {}
+    private cancionService: CancionService,
+    private artistaGrupoService: ArtistaGrupoService,
+    private cancionesAlbumService: CancionAlbumService,
+    private instrumentoArtistaGrupoService: InstrumentoArtistaGrupoService,
+  ) { }
 
   //#region Sweet Alert
   public errorServidor() {
@@ -437,4 +445,112 @@ export class AlertasService {
     });
   }
   //#endregion Album
+
+  //#region Cancion
+  public borrarCancion(id: number, callback: () => void) {
+    this.mostrarAlertaConfirmacion(
+      this.Titulo,
+      this.Mensaje,
+      this.MsjConfirmacion,
+      this.MsjCancelacion,
+    ).then((confirmed) => {
+      if (confirmed) {
+        this.cancionService.delete(id).subscribe(
+          (res) => {
+            callback();
+            this.warningtroast(
+              'La canción fue eliminada con éxito',
+              'Canción eliminada',
+            );
+          },
+          (err) => {
+            console.error(err);
+            this.errorServidor();
+          },
+        );
+      }
+    });
+  }
+  //#endregion Cancion
+
+  //#region Artista Grupo
+  public borrarArtistaGrupo(id: number, callback: () => void) {
+    this.mostrarAlertaConfirmacion(
+      this.Titulo,
+      this.Mensaje,
+      this.MsjConfirmacion,
+      this.MsjCancelacion,
+    ).then((confirmed) => {
+      if (confirmed) {
+        this.artistaGrupoService.delete(id).subscribe(
+          (res) => {
+            callback();
+            this.warningtroast(
+              'El artista fue eliminado con éxito',
+              'Artista eliminado',
+            );
+          },
+          (err) => {
+            console.error(err);
+            this.errorServidor();
+          },
+        );
+      }
+    });
+  }
+  //#endregion Artista Grupo
+
+  //#region Cancion Album
+  public borrarCancionAlbum(id: number, callback: () => void) {
+    this.mostrarAlertaConfirmacion(
+      this.Titulo,
+      this.Mensaje,
+      this.MsjConfirmacion,
+      this.MsjCancelacion,
+    ).then((confirmed) => {
+      if (confirmed) {
+        this.cancionesAlbumService.delete(id).subscribe(
+          (res) => {
+            callback();
+            this.warningtroast(
+              'La canción fue eliminada con éxito',
+              'Canción eliminada',
+            );
+          },
+          (err) => {
+            console.error(err);
+            this.errorServidor();
+          },
+        );
+      }
+    });
+  }
+  //#endregion Cancion Album
+
+  //#region Artista Instrumento
+  public borrarArtistaInstrumento(id: number, callback: () => void) {
+    this.mostrarAlertaConfirmacion(
+      this.Titulo,
+      this.Mensaje,
+      this.MsjConfirmacion,
+      this.MsjCancelacion,
+    ).then((confirmed) => {
+      if (confirmed) {
+        this.instrumentoArtistaGrupoService.delete(id).subscribe(
+          (res) => {
+            callback();
+            this.warningtroast(
+              'El instrumento fue eliminado con éxito',
+              'Instrumento eliminado',
+            );
+          },
+          (err) => {
+            console.error(err);
+            this.errorServidor();
+          },
+        );
+      }
+    });
+  }
+  //#endregion Artista Instrumento
 }

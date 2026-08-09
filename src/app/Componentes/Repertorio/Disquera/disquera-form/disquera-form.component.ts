@@ -26,7 +26,7 @@ export class DisqueraFormComponent implements OnInit {
     fundador: '',
     generos: '',
     paisId: 0,
-    estatusId: 0,
+    estatusId: 1,
     logo: '',
   }
 
