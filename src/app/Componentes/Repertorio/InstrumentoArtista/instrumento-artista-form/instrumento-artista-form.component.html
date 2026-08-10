@@ -1,1 +1,83 @@
-<p>instrumento-artista-form works!</p>
+<div class="scroll-form row">
+    <div class="col-md-6 offset-md-2">
+        <div class="card">
+            <div class="card-body">
+                <form [formGroup]="form" (ngSubmit)="edit ? actualiza() : add()">
+
+                    <!-- Artista -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <input type="text" formControlName="Artista" [(ngModel)]="search" placeholder="Grupo:"
+                                class="form-control"
+                                [class.is-invalid]="form.get('ArtistaId')?.invalid && form.get('ArtistaId')?.touched"
+                                [class.is-valid]="form.get('ArtistaId')?.valid">
+
+                            <select *ngIf="search != null || edit" formControlName="ArtistaId"
+                                [(ngModel)]="artistaGrupo.artistaId" class="form-control" id="inputGroupSelect02"
+                                [class.is-invalid]="form.get('ArtistaId')?.invalid && form.get('ArtistaId')?.touched"
+                                [class.is-valid]="form.get('ArtistaId')?.valid">
+                                <option selected disabled value=0>Selecciona un Artista</option>
+                                <option *ngFor="let artista of Artistas | customGlobalFilter:search"
+                                    value="{{artista.artistaGrupoId}}">{{artista.nombreArtistico}} ({{artista.grupo}})
+                                </option>
+                            </select>
+
+                            <button type="button" class="btn btn-primary" (click)="refrescarArtistas()"
+                                title="Refrescar artistas">
+                                ↻
+                            </button>
+                        </div>
+
+                        <span *ngIf="form.get('ArtistaId')?.hasError('noCero') && form.get('ArtistaId')?.touched">
+                            El campo <span class="alerta">Artista</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <!-- Instrumento -->
+                    <div class="card-body">
+                        <div class="input-group">
+                            <select formControlName="InstrumentoId" [(ngModel)]="artistaGrupo.instrumentoId"
+                                class="form-control" id="inputGroupSelect02"
+                                [class.is-invalid]="form.get('InstrumentoId')?.invalid && form.get('InstrumentoId')?.touched"
+                                [class.is-valid]="form.get('InstrumentoId')?.valid">
+                                <option selected disabled value=0>Selecciona un Instrumento</option>
+                                <option *ngFor="let instrumento of Instrumentos" value="{{instrumento.instrumentoId}}">
+                                    {{instrumento.nombre}}</option>
+                            </select>
+
+                            <button type="button" class="btn btn-primary" (click)="refrescarInstrumentos()"
+                                title="Refrescar instrumentos">
+                                ↻
+                            </button>
+                        </div>
+
+                        <span
+                            *ngIf="form.get('InstrumentoId')?.hasError('noCero') && form.get('InstrumentoId')?.touched">
+                            El campo <span class="alerta">Instrumento</span> es <strong>Requerido</strong>.
+                        </span>
+                    </div>
+
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
+                        <button type="button" class="btn btn-primary" (click)="regresar()">Regresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 inicio-card">
+        <div class="card card-body text-center">
+            <img [src]="artistaGrupo.artistaId == 0 ? '/assets/noImagen.png' : getImgArtista(artistaGrupo.artistaId ||0) "
+                class="card-img-top">
+            <h3 style="text-transform: uppercase;">
+                {{artistaGrupo.instrumentoArtistaGrupoId}} - {{artistaGrupo.artistaId == 0 ? 'Nombre del Artista' :
+                getNombreArtista(artistaGrupo.artistaId||0)}}
+            </h3>
+            <p>{{artistaGrupo.artistaId ? getNombreGrupo(artistaGrupo.artistaId) :
+                'Grupo del Artista'}}</p>
+            <p>{{artistaGrupo.instrumentoId ? getNombreInstrumento(artistaGrupo.instrumentoId) :
+                'Instrumento del Artista'}}</p>
+        </div>
+    </div>
+</div>

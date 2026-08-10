@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertasService } from 'src/app/Services/alertas.service';
 import { fechaMayorQueValidator, formatearFechaInput, FuncionesService } from 'src/app/Shared/funciones';
-import { NavigationService } from 'src/app/Services/navigation.service';
 
 import { Disquera } from 'src/app/Models/Disquera';
 import { DisqueraService } from 'src/app/Services/disquera.service';
@@ -43,7 +42,6 @@ export class DisqueraFormComponent implements OnInit {
     private fb: FormBuilder,
     private alerta: AlertasService,
     public funciones: FuncionesService,
-    private navigationService: NavigationService,
 
     private catalogo: CatalogosService,
     private paisService: PaisService,
@@ -123,7 +121,7 @@ export class DisqueraFormComponent implements OnInit {
     const params = this.activatedRoute.snapshot.params;
     this.service.update(params['id'], this.disquera).subscribe(
       (res) => {
-        this.navigationService.goBack();
+        this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
         this.alerta.infotroast(
           `La disquera '${this.disquera.nombre}' fue actualizada con éxito`,
           'Disquera Actualizada'
@@ -190,8 +188,4 @@ export class DisqueraFormComponent implements OnInit {
     this.alerta.successtroast('Lista de paises actualizada', 'Actualizado');
   }
   //#endregion Refresh
-
-  regresar() {
-    this.navigationService.goBack();
-  }
 }

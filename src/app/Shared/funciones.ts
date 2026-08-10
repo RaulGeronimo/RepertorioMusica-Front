@@ -13,6 +13,10 @@ const EXCLUIR = [
   'grupoId',
   'disqueraId',
   'albumId',
+  'cancionId',
+  'cancionAlbumId',
+  'artistaGrupoId',
+  'instrumentoId',
   'foto',
   'bandera',
   'logo',
@@ -27,6 +31,7 @@ const FECHAS = [
   'fechaFinado',
   'fundacion',
   'lanzamiento',
+  'publicacion',
 ];
 
 const FECHAS_HORA = ['modificado', 'registro', 'fecha'];

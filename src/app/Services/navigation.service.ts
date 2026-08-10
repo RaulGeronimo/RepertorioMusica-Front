@@ -15,6 +15,7 @@ export class NavigationService {
     '/login',
     '/register',
     '/reset',
+    '/buscar/album/cancion',
   ];
 
   constructor(private router: Router) {

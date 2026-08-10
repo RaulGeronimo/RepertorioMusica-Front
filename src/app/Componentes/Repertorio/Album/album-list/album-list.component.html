@@ -48,10 +48,10 @@
                         <i class="far fa-trash-alt"></i>
                     </button>
 
-                    <button *ngIf="permiso.puedeVer(Seccion.Cancion)"
-                        [routerLink]="['../buscar/cancion', album.albumId]" class="btn btn-success btn-block">
+                    <a *ngIf="permiso.puedeVer(Seccion.Cancion)"
+                        [routerLink]="['../buscar/album/cancion', album.albumId]" class="btn btn-success btn-block">
                         <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
-                    </button>
+                    </a>
 
                     <button *ngIf="!show" class="btn btn-primary" (click)="show = !show">
                         <i class="fa-solid fa-circle-info"></i>
@@ -137,11 +137,11 @@
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
 
-                            <button *ngIf="permiso.puedeVer(Seccion.Cancion)"
-                                [routerLink]="['../buscar/cancion', album.albumId]"
+                            <a *ngIf="permiso.puedeVer(Seccion.Cancion)"
+                                [routerLink]="['../buscar/album/cancion', album.albumId]"
                                 class="btn btn-success btn-block">
                                 <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
-                            </button>
+                            </a>
 
                             <button *ngIf="permiso.puedeEliminar(Seccion.Album)" class="btn btn-danger"
                                 (click)="borrar(album.albumId)">

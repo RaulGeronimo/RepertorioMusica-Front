@@ -75,10 +75,10 @@
                 <th mat-header-cell *matHeaderCellDef>Acciones</th>
                 <td mat-cell *matCellDef="let cancion">
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                        <button *ngIf="permiso.puedeEditar(Seccion.Cancion)"
+                        <a *ngIf="permiso.puedeEditar(Seccion.Cancion)"
                             [routerLink]="['actualizar', cancion.cancionId]" class="btn btn-info btn-block">
                             <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
+                        </a>
 
                         <button *ngIf="permiso.puedeEliminar(Seccion.Cancion)" class="btn btn-danger"
                             (click)="borrar(cancion.cancionId)">

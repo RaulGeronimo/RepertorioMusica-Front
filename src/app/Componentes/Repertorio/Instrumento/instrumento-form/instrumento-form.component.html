@@ -47,8 +47,8 @@
 
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                         <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
-                        <button *ngIf="!edit" class="btn btn-primary" [routerLink]="['..']">Regresar</button>
-                        <button *ngIf="edit" class="btn btn-primary" [routerLink]="['../../']">Regresar</button>
+                        <a *ngIf="!edit" class="btn btn-primary" [routerLink]="['..']">Regresar</a>
+                        <a *ngIf="edit" class="btn btn-primary" [routerLink]="['../../']">Regresar</a>
                     </div>
                 </form>
             </div>

@@ -273,7 +273,7 @@ const routes: Routes = [
 
       //#region Busqueda
       {
-        path: 'buscar/album/:id',
+        path: 'buscar/grupo/album/:id',
         component: BuscarAlbumComponent,
         data: {
           permisos: [
@@ -283,7 +283,7 @@ const routes: Routes = [
         },
       },
       {
-        path: 'buscar/cancion/:id',
+        path: 'buscar/grupo/cancion/:id',
         component: BuscarCancionesComponent,
         data: {
           permisos: [
@@ -293,7 +293,7 @@ const routes: Routes = [
         },
       },
       {
-        path: 'buscar/integrante/:id',
+        path: 'buscar/grupo/integrante/:id',
         component: BuscarArtistaComponent,
         data: {
           permisos: [
@@ -325,4 +325,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

@@ -1,0 +1,5 @@
+.grupo {
+    width: 100%;
+    object-fit: cover;
+    max-height: 540px;
+}

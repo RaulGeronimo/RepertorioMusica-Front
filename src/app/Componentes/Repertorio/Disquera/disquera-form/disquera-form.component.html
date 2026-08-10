@@ -59,17 +59,18 @@
                     <div class="card-body">
                         <div class="input-group">
                             <!-- <label class="input-group-text" for="inputGroupSelect02">País</label> -->
-                             <input type="text" formControlName="Pais" [(ngModel)]="search" placeholder="País:"
+                            <input type="text" formControlName="Pais" [(ngModel)]="search" placeholder="País:"
                                 class="form-control"
                                 [class.is-invalid]="form.get('PaisId')?.invalid && form.get('PaisId')?.touched"
                                 [class.is-valid]="form.get('PaisId')?.valid">
 
-                            <select *ngIf="search != null || edit" formControlName="PaisId" [(ngModel)]="disquera.paisId" class="form-control"
-                                id="inputGroupSelect02"
+                            <select *ngIf="search != null || edit" formControlName="PaisId"
+                                [(ngModel)]="disquera.paisId" class="form-control" id="inputGroupSelect02"
                                 [class.is-invalid]="form.get('PaisId')?.invalid && form.get('PaisId')?.touched"
                                 [class.is-valid]="form.get('PaisId')?.valid">
                                 <option selected disabled value="0">Selecciona una Nacionalidad</option>
-                                <option *ngFor="let pais of Paises | customGlobalFilter:search" value="{{pais.paisId}}">{{pais.nombre}}</option>
+                                <option *ngFor="let pais of Paises | customGlobalFilter:search" value="{{pais.paisId}}">
+                                    {{pais.nombre}}</option>
                             </select>
 
                             <button type="button" class="btn btn-primary" (click)="refrescarPaises()"
@@ -115,7 +116,8 @@
 
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                         <button [disabled]="form.invalid" type="submit" class="btn btn-success">Aceptar</button>
-                        <button class="btn btn-primary" (click)="regresar()">Regresar</button>
+                        <a *ngIf="!edit" class="btn btn-primary" [routerLink]="['..']">Regresar</a>
+                        <a *ngIf="edit" class="btn btn-primary" [routerLink]="['../../']">Regresar</a>
                     </div>
                 </form>
             </div>

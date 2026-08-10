@@ -81,17 +81,17 @@
                         class="btn btn-info btn-block"><i class="fa-solid fa-pen-to-square"></i>
                     </a>
 
-                    <a *ngIf="permiso.puedeVer(Seccion.Cancion)" [routerLink]="['../buscar/cancion', grupos.grupoId]"
+                    <a *ngIf="permiso.puedeVer(Seccion.Cancion)" [routerLink]="['../buscar/grupo/cancion', grupos.grupoId]"
                         class="btn btn-success btn-block">
                         <i class="fa-solid fa-music"></i>
                     </a>
 
-                    <a *ngIf="permiso.puedeVer(Seccion.Album)" [routerLink]="['../buscar/album', grupos.grupoId]"
+                    <a *ngIf="permiso.puedeVer(Seccion.Album)" [routerLink]="['../buscar/grupo/album', grupos.grupoId]"
                         class="btn btn-warning btn-block">
                         <i class="fa-sharp fa-solid fa-compact-disc"></i>
                     </a>
 
-                    <a *ngIf="permiso.puedeVer(Seccion.Artista)" [routerLink]="['../buscar/integrante', grupos.grupoId]"
+                    <a *ngIf="permiso.puedeVer(Seccion.Artista)" [routerLink]="['../buscar/grupo/integrante', grupos.grupoId]"
                         class="btn btn-danger btn-block">
                         <i class="fa-solid fa-user"></i>
                     </a>
@@ -171,17 +171,17 @@
                             </button>
 
                             <a *ngIf="permiso.puedeVer(Seccion.Cancion)"
-                                [routerLink]="['../buscar/cancion', grupo.grupoId]" class="btn btn-success btn-block">
+                                [routerLink]="['../buscar/grupo/cancion', grupo.grupoId]" class="btn btn-success btn-block">
                                 <i class="fa-solid fa-music"></i>
                             </a>
 
-                            <a *ngIf="permiso.puedeVer(Seccion.Album)" [routerLink]="['../buscar/album', grupo.grupoId]"
+                            <a *ngIf="permiso.puedeVer(Seccion.Album)" [routerLink]="['../buscar/grupo/album', grupo.grupoId]"
                                 class="btn btn-warning btn-block">
                                 <i class="fa-sharp fa-solid fa-compact-disc"></i>
                             </a>
 
                             <a *ngIf="permiso.puedeVer(Seccion.Artista)"
-                                [routerLink]="['../buscar/integrante', grupo.grupoId]" class="btn btn-danger btn-block">
+                                [routerLink]="['../buscar/grupo/integrante', grupo.grupoId]" class="btn btn-danger btn-block">
                                 <i class="fa-solid fa-user"></i>
                             </a>
                         </div>

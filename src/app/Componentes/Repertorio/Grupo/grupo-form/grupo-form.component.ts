@@ -132,7 +132,7 @@ export class GrupoFormComponent implements OnInit {
     const params = this.activatedRoute.snapshot.params;
     this.service.update(params['id'], this.grupo).subscribe(
       (res) => {
-        this.navigationService.goBack();
+        this.regresar()
         this.alerta.infotroast(
           `El grupo '${this.grupo.nombre}' fue actualizado con éxito`,
           'Grupo Actualizado'
