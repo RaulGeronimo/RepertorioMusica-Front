@@ -41,7 +41,8 @@
 <div class="container-scroll row">
     <div class="col-md-5 margen">
         <div class="card card-body text-center bg-dark">
-            <img class="grupo" [src]="Grupo.logo == '' ? '/assets/noImagen.png' : Grupo.logo " alt="Imagen del Grupo">
+            <img class="grupo" [src]="Grupo.logo == '' ? '/assets/noImagen.png' : Grupo.logo " alt="Imagen del Grupo"
+                (error)="funciones.imagenNoValida($event)">
         </div>
     </div>
 
@@ -107,7 +108,8 @@
                     </button>
                 </div>
             </div>
-            <img [src]="artista.foto == '' ? '/assets/noImagen.png' : artista.foto " alt="Imagen del Artista">
+            <img [src]="artista.foto == '' ? '/assets/noImagen.png' : artista.foto " alt="Imagen del Artista"
+                (error)="funciones.imagenNoValida($event)" loading="lazy">
             <div class="card-body" *ngIf="show">
                 <p style="font-weight: bold;">Grupo</p>
                 <p>{{artista.grupo}}</p>

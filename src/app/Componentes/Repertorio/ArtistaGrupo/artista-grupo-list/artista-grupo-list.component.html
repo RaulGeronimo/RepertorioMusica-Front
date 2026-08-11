@@ -56,7 +56,8 @@
                     </button>
                 </div>
             </div>
-            <img [src]="artista.foto == '' ? '/assets/noImagen.png' : artista.foto " alt="Imagen del Artista">
+            <img [src]="artista.foto == '' ? '/assets/noImagen.png' : artista.foto " alt="Imagen del Artista"
+                (error)="funciones.imagenNoValida($event)" loading="lazy">
             <div class="card-body" *ngIf="show">
                 <p style="font-weight: bold;">Grupo</p>
                 <p>{{artista.grupo}}</p>

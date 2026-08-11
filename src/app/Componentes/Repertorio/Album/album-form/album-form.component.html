@@ -138,7 +138,8 @@
 
     <div class="col-md-4 inicio-card">
         <div class="card card-body text-center">
-            <img [src]="album.portada == '' ? '/assets/noImagen.png' : album.portada " class="card-img-top">
+            <img [src]="album.portada == '' ? '/assets/noImagen.png' : album.portada " class="card-img-top"
+                (error)="funciones.imagenNoValida($event)">
             <h3 style="text-transform: uppercase;">
                 {{album.albumId}} - {{album.nombre == '' ? 'Nombre del Álbum' : album.nombre}}
             </h3>

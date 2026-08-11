@@ -31,7 +31,8 @@
 <div class="container-scroll row">
     <div class="col-md-5 margen">
         <div class="card card-body text-center bg-dark">
-            <img [src]="Album.portada == '' ? '/assets/noImagen.png' : Album.portada " alt="Imagen del Album">
+            <img [src]="Album.portada == '' ? '/assets/noImagen.png' : Album.portada " alt="Imagen del Album"
+                (error)="funciones.imagenNoValida($event)">
         </div>
     </div>
 
