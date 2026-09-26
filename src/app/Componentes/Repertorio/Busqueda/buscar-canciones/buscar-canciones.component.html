@@ -23,14 +23,6 @@
     <input #inputMaterial matInput placeholder="Buscar" class="form-control bg-dark text-white mb-2"
         (keyup)="applyFilter($event)" autofocus>
 
-
-    <a *ngIf="tabla" type="button" class="btn btn-outline-light" (click)="cambiarVista()">
-        <i class="fa-solid fa-list"></i>
-    </a>
-    <a *ngIf="!tabla" type="button" class="btn btn-outline-light" (click)="cambiarVista()">
-        <i class="fa-solid fa-table"></i>
-    </a>
-
     <!-- Exportar -->
     <app-export-button [action]="export.bind(this)" color="success" [outline]="true"
         extraClass="me-2"></app-export-button>

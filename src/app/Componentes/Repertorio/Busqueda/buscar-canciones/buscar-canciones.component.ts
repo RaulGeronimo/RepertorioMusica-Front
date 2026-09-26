@@ -22,6 +22,7 @@ export class BuscarCancionesComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'cancionId',
     'nombre',
+    'albumes',
     'duracion',
     'publicacion',
     'genero',
@@ -35,9 +36,6 @@ export class BuscarCancionesComponent implements OnInit, AfterViewInit {
   Grupo: any = [];
   Canciones: any = [];
 
-  search: any;
-  show: boolean = !true;
-  tabla: boolean = true;
 
   //#region Permisos
   Seccion = Seccion;
@@ -115,16 +113,6 @@ export class BuscarCancionesComponent implements OnInit, AfterViewInit {
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
-    }
-  }
-
-  cambiarVista() {
-    this.tabla = !this.tabla;
-
-    if (this.tabla) {
-      this.search = '';
-    } else {
-      this.dataSource.filter = '';
     }
   }
 
